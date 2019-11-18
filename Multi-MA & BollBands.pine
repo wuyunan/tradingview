@@ -1,0 +1,37 @@
+//@version=4
+study("Multi-MA & BollBands",shorttitle="BB-MA",overlay = true)
+SOURCE = input(close,title = "MA Source")
+lineWidth = input(2,title="Line Width")
+
+bollSrc = input(close, title="BB Source") 
+lng = input(20, title="Period")
+
+mut = input(2.0, minval=0.001, maxval=50,title="BB Multiplier")
+mut2 = input(2.5, minval=0.001, maxval=50,title="BB2 Multiplier")
+mut3 = input(3.0, minval=0.001, maxval=50,title="BB3 Multiplier")
+bbl = input(true,title="Show BB Line")
+
+bbLineWidth = input(2,title="BB Line Width")
+basis = sma(bollSrc, lng)
+dev = mut * stdev(bollSrc, lng)
+dev2 = mut2 * stdev(bollSrc, lng)
+dev3 = mut3 * stdev(bollSrc, lng)
+upper = basis + dev
+lower = basis - dev
+sma20  =sma(SOURCE, 20)
+
+plot(bbl?basis:na, color=color.white,linewidth=bbLineWidth,title="BB_Basis")
+plot(bbl?upper:na, color=color.white,linewidth=bbLineWidth,title="BB_Upper")
+plot(bbl?lower:na, color=color.white,linewidth=bbLineWidth,title="BB_Lower")
+
+plot(bbl?basis + dev2:na, color=color.white,linewidth=bbLineWidth,title="BB2_Upper")
+plot(bbl?basis - dev2:na, color=color.white,linewidth=bbLineWidth,title="BB2_Lower")
+
+plot(bbl?basis + dev3:na, color=color.white,linewidth=bbLineWidth,title="BB3_Upper")
+plot(bbl?basis - dev3:na, color=color.white,linewidth=bbLineWidth,title="BB3_Lower")
+
+plot(sma(SOURCE, 10),title="10MA",color=color.yellow,linewidth=lineWidth)
+plot(sma20, title="20MA",color=color.red,linewidth=lineWidth)
+plot(sma(SOURCE, 55),title="55MA",color=color.purple,linewidth=lineWidth)
+plot(sma(SOURCE, 100),title="100MA",color=color.lime,linewidth=lineWidth)
+plot(sma(SOURCE, 120),title="120MA",color=color.olive,linewidth=lineWidth)
