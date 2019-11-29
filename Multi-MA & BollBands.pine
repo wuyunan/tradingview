@@ -1,28 +1,38 @@
 //@version=4
-study("Multi-MA & BollBands",shorttitle="BB-MA",overlay = true)
-SOURCE = input(close,title = "MA Source")
-lineWidth = input(2,title="Line Width")
-
-bollSrc = input(close, title="BB Source") 
+study("Multi-MA & BollBands",shorttitle="BBs & MAs",overlay = true)
+//BB
+srcBoll = input(close, title="BB Source") 
 lng = input(20, title="Period")
-
 mut = input(2.0, minval=0.001, maxval=50,title="BB Multiplier")
 mut2 = input(2.5, minval=0.001, maxval=50,title="BB2 Multiplier")
 mut3 = input(3.0, minval=0.001, maxval=50,title="BB3 Multiplier")
 bbl = input(true,title="Show BB Line")
+bbLineWidth = input(1,title="BB Line Width")
 
-bbLineWidth = input(2,title="BB Line Width")
-basis = sma(bollSrc, lng)
-dev = mut * stdev(bollSrc, lng)
-dev2 = mut2 * stdev(bollSrc, lng)
-dev3 = mut3 * stdev(bollSrc, lng)
+//MAs
+lenEMA1 = input(5, minval=1, title="EMA1 Period")
+lenEMA2 = input(10, minval=1, title="EMA2 Period")
+lenEMA3 = input(60, minval=1, title="EMA3 Period")
+lenSMA1 = input(100, minval=1, title="SMA1 Period")
+lenSMA2 = input(200, minval=1, title="SMA2 Period")
+srcEMA1 = input(close, title="EMA1 Source")
+srcEMA2 = input(close, title="EMA2 Source")
+srcEMA3 = input(close, title="EMA3 Source")
+srcSMA1 = input(close, title="SMA1 Source")
+srcSMA2 = input(close, title="SMA2 Source")
+lineWidth = input(2,title="MA Line Width")
+
+basis = sma(srcBoll, lng)
+dev = mut * stdev(srcBoll, lng)
+dev2 = mut2 * stdev(srcBoll, lng)
+dev3 = mut3 * stdev(srcBoll, lng)
 upper = basis + dev
 lower = basis - dev
-sma20  =sma(SOURCE, 20)
 
-plot(bbl?basis:na, color=color.white,linewidth=bbLineWidth,title="BB_Basis")
-plot(bbl?upper:na, color=color.white,linewidth=bbLineWidth,title="BB_Upper")
-plot(bbl?lower:na, color=color.white,linewidth=bbLineWidth,title="BB_Lower")
+plot(bbl?basis:na, color=color.lime,linewidth=bbLineWidth,title="BB_Basis",transp=0)
+upperPlot=plot(bbl?upper:na, color=color.white,linewidth=bbLineWidth,title="BB_Upper")
+lowerPlot=plot(bbl?lower:na, color=color.white,linewidth=bbLineWidth,title="BB_Lower")
+fill(upperPlot,lowerPlot,color=color.green)
 
 plot(bbl?basis + dev2:na, color=color.white,linewidth=bbLineWidth,title="BB2_Upper")
 plot(bbl?basis - dev2:na, color=color.white,linewidth=bbLineWidth,title="BB2_Lower")
@@ -30,8 +40,9 @@ plot(bbl?basis - dev2:na, color=color.white,linewidth=bbLineWidth,title="BB2_Low
 plot(bbl?basis + dev3:na, color=color.white,linewidth=bbLineWidth,title="BB3_Upper")
 plot(bbl?basis - dev3:na, color=color.white,linewidth=bbLineWidth,title="BB3_Lower")
 
-plot(sma(SOURCE, 10),title="10MA",color=color.yellow,linewidth=lineWidth)
-plot(sma20, title="20MA",color=color.red,linewidth=lineWidth)
-plot(sma(SOURCE, 55),title="55MA",color=color.purple,linewidth=lineWidth)
-plot(sma(SOURCE, 100),title="100MA",color=color.lime,linewidth=lineWidth)
-plot(sma(SOURCE, 120),title="120MA",color=color.olive,linewidth=lineWidth)
+plot(ema(srcEMA1, lenEMA1),title="EMA1",color=color.yellow,linewidth=lineWidth,transp=0)
+plot(ema(srcEMA2, lenEMA2), title="EMA3",color=color.red,linewidth=lineWidth,transp=0)
+plot(ema(srcEMA3, lenEMA3),title="EMA3",color=color.purple,linewidth=lineWidth,transp=0)
+plot(sma(srcSMA1, lenSMA1),title="SMA1",color=color.lime,linewidth=lineWidth,transp=0)
+plot(sma(srcSMA2, lenSMA2),title="SMA2",color=color.olive,linewidth=lineWidth,transp=0)
+
