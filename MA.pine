@@ -1,0 +1,52 @@
+//@version=4
+study(shorttitle="BB+MAs", title="BB+MAs", overlay=true)
+
+//BB
+length1 = input(21, minval=1, title="BB1期間")
+length2 = input(21, minval=1, title="BB2期間")
+length3 = input(21, minval=1, title="BB3期間")
+src1 = input(close, title="Source")
+src2 = input(close, title="Source")
+src3 = input(close, title="Source")
+mult1 = input(1.0, minval=0.001, maxval=50, title="BB1偏差")
+mult2 = input(2.0, minval=0.001, maxval=50, title="BB2偏差")
+mult3 = input(3.0, minval=0.001, maxval=50, title="BB3偏差")
+basis1 = sma(src1, length1)
+basis2 = sma(src2, length2)
+basis3 = sma(src3, length3)
+dev1 = mult1 * stdev(src1, length1)
+dev2 = mult2 * stdev(src2, length2)
+dev3 = mult3 * stdev(src3, length3)
+upper1 = basis1 + dev1
+upper2 = basis2 + dev2
+upper3 = basis3 + dev3
+lower1 = basis1 - dev1
+lower2 = basis2 - dev2
+lower3 = basis3 - dev3
+plot(basis1, color=color.orange, linewidth=2, title="BBcenter")
+plot(upper1, color=color.blue, title="BB1")
+plot(lower1, color=color.blue, title="BB1")
+f1 = plot(upper2, color=color.blue, title="BB2")
+f2 = plot(lower2, color=color.blue, title="BB2")
+f3 = plot(upper3, color=color.blue, title="BB3")
+f4 = plot(lower3, color=color.blue, title="BB3")
+fill(f1,f3,title="BB2~3間色付け1")
+fill(f2,f4,title="BB2~3間色付け2")
+
+
+//MAs
+lenEMA1 = input(13, minval=1, title="EMA1期間")
+lenEMA2 = input(32, minval=1, title="EMA2期間")
+lenEMA3 = input(64, minval=1, title="EMA3期間")
+lenSMA1 = input(100, minval=1, title="SMA1期間")
+lenSMA2 = input(200, minval=1, title="SMA2期間")
+srcEMA1 = input(close, title="Source")
+srcEMA2 = input(close, title="Source")
+srcEMA3 = input(close, title="Source")
+srcSMA1 = input(close, title="Source")
+srcSMA2 = input(close, title="Source")
+plot(ema(srcEMA1, lenEMA1), color=color.green, linewidth=2, title="EMA1")
+plot(ema(srcEMA2, lenEMA2), color=color.lime, linewidth=2, title="EMA2")
+plot(ema(srcEMA3, lenEMA3), color=color.yellow, linewidth=2, title="EMA3")
+plot(sma(srcSMA1, lenSMA1), color=color.white, linewidth=2, title="SMA1")
+plot(sma(srcSMA2, lenSMA2), color=color.red, linewidth=2, title="SMA2")
